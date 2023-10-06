@@ -13,13 +13,15 @@ public class Main {
         List<Contacto> contactos = new ArrayList<>();
         Contacto remitente = new Contacto("Lucas", "Caamaño", "lucas@gmail.com");
         contactos.add(new Contacto("Juan", "Perez", "juan@example.com"));
-        contactos.add(new Contacto("María","Fernandez", "maria@example.com"));
+        contactos.add(new Contacto("Maria","Fernandez", "maria@example.com"));
         contactos.add(new Contacto("Pedro","Picapiedra", "pedro@ucp.edu.ar"));
         contactos.add(new Contacto("Laura","Sanchez", "laura@example.com"));
         contactos.add(new Contacto("Jose","Sanchez", "josesan@example.com"));
+        contactos.add(new Contacto("Mercado","Libre", "Mercadolibre@example.com"));
 
         BandejaDeEntrada bandeja = new BandejaDeEntrada();
         BandejaDeEnviados bandejaEnviados = new BandejaDeEnviados();
+        FiltroSpam filtroSpam = new FiltroSpam();
 
         SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy HH:mm");
 
@@ -33,6 +35,7 @@ public class Main {
                 System.out.println("5. Buscar Correo por Fecha");
                 System.out.println("6. Buscar Correo por Destinatario");
                 System.out.println("7. Buscar Correos de la UCP");
+                System.out.println("8. Correos Spam");
                 System.out.println("9. Salir");
                 int opcion = Integer.parseInt(scanner.nextLine());
 
@@ -233,15 +236,49 @@ public class Main {
                                 System.out.println("------------");
                             }
                         }
-                        break;  
+                        break;
+
+                    case 8:
+                        System.out.println("Selecciona un correo que deseas marcar como spam:");
+                        // Mostrar la lista de correos electrónicos para que el usuario elija uno
+
+                        int indiceCorreoSpam = Integer.parseInt(scanner.nextLine()) - 1; // Suponiendo que los correos se muestran numerados
+
+                        if (indiceCorreoSpam >= 0 && indiceCorreoSpam < bandejaEnviados.obtenerCorreosEnviados().size()) {
+                            Correo correoSpam = bandejaEnviados.obtenerCorreosEnviados().get(indiceCorreoSpam);
+
+                            filtroSpam.marcarComoSpam(correoSpam); // Marcar el correo como spam
+                        } else {
+                            System.out.println("Índice de correo no válido.");
+                        }
+                        
+                        // Mostrar automáticamente todos los correos marcados como spam con asunto "Mercado Libre" o correo "Mercadolibre@example.com"
+                        List<Correo> correosSpamMercadoLibre = new ArrayList<>();
+                        for (Correo correo : filtroSpam.obtenerCorreosSpam()) {
+                            if (correo.getAsunto().equalsIgnoreCase("Mercado Libre") || correo.getRemitente().getCorreoElectronico().equalsIgnoreCase("Mercadolibre@example.com")) {
+                                correosSpamMercadoLibre.add(correo);
+                            }
+                        }
+                        
+                        if (!correosSpamMercadoLibre.isEmpty()) {
+                            System.out.println("Correos spam con asunto 'Mercado Libre' o correo 'Mercadolibre@example.com':");
+                            for (Correo c : correosSpamMercadoLibre) {
+                                System.out.println("Asunto: " + c.getAsunto());
+                                System.out.println("Contenido: " + c.getContenido());
+                                System.out.println("Remitente: " + c.getRemitente().getNombre());
+                                System.out.println("Destinatarios: " + c.getDestinatarios().stream().map(Contacto::getNombre).collect(Collectors.joining(", ")));
+                                System.out.println("------------");
+                            }
+                        }
+                        break;
 
                     case 9:
-                    System.exit(0);
-                    default:
-                        System.out.println("Opción no válida.");
-                        break;
+                        System.exit(0);
+                        default:
+                            System.out.println("Opción no válida.");
+                            break;
                 }
             }
         } // El Scanner se cerrará automáticamente al salir del bloque try
     }
- }
+}
