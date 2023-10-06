@@ -18,4 +18,8 @@ public class FiltroSpam {
     public boolean esCorreoSpam(Correo correo) {
         return correosSpam.contains(correo);
     }
+
+    public List<Correo> obtenerCorreosSpam() {
+        return new ArrayList<>(correosSpam);
+    }
 }
