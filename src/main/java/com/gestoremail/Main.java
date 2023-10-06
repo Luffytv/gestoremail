@@ -123,32 +123,16 @@ public class Main {
                     case 4:
                         System.out.print("Ingrese el asunto a buscar (deje en blanco si no desea filtrar por asunto): ");
                         String asuntoABuscar = scanner.nextLine();
-
+                    
                         System.out.print("Ingrese la palabra clave a buscar (deje en blanco si no desea filtrar por palabra clave): ");
                         String palabraClave = scanner.nextLine();
-
-                        System.out.print("Ingrese el correo del destinatario a buscar (deje en blanco si no desea filtrar por destinatario): ");
-                        String correoDestinatario = scanner.nextLine();
-
-                        // Busca el destinatario en la lista de contactos (puedes ajustar esto según tu implementación)
-                        Contacto destinatario = null;
-                        for (Contacto contacto : contactos) {
-                            if (contacto.getCorreoElectronico().equalsIgnoreCase(correoDestinatario)) {
-                                destinatario = contacto;
-                                break;
-                            }
-                        }
-
+                    
                         // Crear una instancia de FiltroAsuntoPalabraClave con los criterios proporcionados por el usuario
-                        FiltroAsuntoPalabraClave filtro = new FiltroAsuntoPalabraClave(
-                            asuntoABuscar.isEmpty() ? null : asuntoABuscar,
-                            palabraClave.isEmpty() ? null : palabraClave,
-                            destinatario
-                        );
-
+                        FiltroAsuntoPalabraClave filtro = new FiltroAsuntoPalabraClave(asuntoABuscar, palabraClave);
+                    
                         // Aplicar el filtro a la lista de correos en la bandeja de enviados
                         List<Correo> correosFiltrados = filtro.aplicarFiltro(bandejaEnviados.obtenerCorreosEnviados());
-
+                    
                         if (correosFiltrados.isEmpty()) {
                             System.out.println("No se encontraron correos que coincidan con los criterios de búsqueda.");
                         } else {

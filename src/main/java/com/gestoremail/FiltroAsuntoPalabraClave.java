@@ -7,7 +7,7 @@ public class FiltroAsuntoPalabraClave {
     private String asunto;
     private String palabraClave;
 
-    public FiltroAsuntoPalabraClave(String asunto, String palabraClave, Contacto destinatario) {
+    public FiltroAsuntoPalabraClave(String asunto, String palabraClave) {
         this.asunto = asunto;
         this.palabraClave = palabraClave;
     }
