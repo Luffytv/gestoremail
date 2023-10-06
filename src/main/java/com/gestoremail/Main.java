@@ -225,75 +225,31 @@ public class Main {
                         break;
 
                     case 7:
-                        System.out.println("¿Cómo deseas buscar correos de la UCP?");
-                        System.out.println("1. Buscar por dirección de correo '@ucp.edu.ar'");
-                        System.out.println("2. Buscar por asunto 'UCP'");
-                        System.out.println("3. Buscar por asunto 'UCP' y dirección de correo '@ucp.edu.ar'");
-                        int opcionBusquedaUCP = Integer.parseInt(scanner.nextLine());
-                    
-                        switch (opcionBusquedaUCP) {
-                            case 1:
-                                // Filtrar correos por dirección de correo '@ucp.edu.ar'
-                                List<Correo> correosFiltradosDireccionUCP = FiltroUCPPrioridad.filtrarYPriorizarUCP(bandejaEnviados.obtenerCorreosEnviados());
-                    
-                                if (correosFiltradosDireccionUCP.isEmpty()) {
-                                    System.out.println("No se encontraron correos con dirección '@ucp.edu.ar'.");
+                        List<Correo> correosUCP = FiltroUCPPrioridad.filtrarYPriorizarUCP(bandejaEnviados.obtenerCorreosEnviados());
+                        
+                        if (correosUCP.isEmpty()) {
+                            System.out.println("No se encontraron correos que cumplan ambos criterios.");
+                        } else {
+                            for (Correo correo : correosUCP) {
+                                if ("UCP".equalsIgnoreCase(correo.getAsunto()) && correo.getDestinatarios().stream()
+                                    .anyMatch(d -> d.getCorreoElectronico().endsWith("@ucp.edu.ar"))) {
+                                    // Cumple ambos criterios, asignar prioridad ALTA
+                                    correo.setPrioridad("ALTA");
                                 } else {
-                                    System.out.println("Correos encontrados con dirección '@ucp.edu.ar':");
-                                    for (Correo correo : correosFiltradosDireccionUCP) {
-                                        // Imprimir la información del correo
-                                        System.out.println("Asunto: " + correo.getAsunto());
-                                        System.out.println("Mensaje: " + correo.getContenido());
-                                        System.out.println("Remitente: " + correo.getRemitente().getCorreoElectronico());
-                                        System.out.println("Destinatarios: " + correo.getDestinatarios().stream().map(Contacto::getCorreoElectronico).collect(Collectors.joining(", ")));
-                                        System.out.println("------------");
-                                    }
+                                    // No cumple ambos criterios, asignar prioridad NORMAL (si lo deseas)
+                                    correo.setPrioridad("NORMAL");
                                 }
-                                break;
-                    
-                            case 2:
-                                // Filtrar correos por asunto 'UCP'
-                                List<Correo> correosFiltradosUCP = FiltroUCPPrioridad.filtrarYPriorizarUCP(bandejaEnviados.obtenerCorreosEnviados());
-                    
-                                if (correosFiltradosUCP.isEmpty()) {
-                                    System.out.println("No se encontraron correos con asunto 'UCP'.");
-                                } else {
-                                    System.out.println("Correos encontrados con asunto 'UCP':");
-                                    for (Correo correo : correosFiltradosUCP) {
-                                        // Imprimir la información del correo
-                                        System.out.println("Asunto: " + correo.getAsunto());
-                                        System.out.println("Mensaje: " + correo.getContenido());
-                                        System.out.println("Remitente: " + correo.getRemitente().getCorreoElectronico());
-                                        System.out.println("Destinatarios: " + correo.getDestinatarios().stream().map(Contacto::getCorreoElectronico).collect(Collectors.joining(", ")));
-                                        System.out.println("------------");
-                                    }
-                                }
-                                break;
-                    
-                            case 3:
-                                // Filtrar correos por asunto 'UCP' y dirección de correo '@ucp.edu.ar'
-                                List<Correo> correosFiltradosUCPYDireccionUCP = FiltroUCPPrioridad.filtrarYPriorizarUCP(bandejaEnviados.obtenerCorreosEnviados());
-                    
-                                if (correosFiltradosUCPYDireccionUCP.isEmpty()) {
-                                    System.out.println("No se encontraron correos que cumplan ambos criterios.");
-                                } else {
-                                    System.out.println("Correos encontrados que cumplen ambos criterios:");
-                                    for (Correo correo : correosFiltradosUCPYDireccionUCP) {
-                                        // Imprimir la información del correo
-                                        System.out.println("Asunto: " + correo.getAsunto());
-                                        System.out.println("Mensaje: " + correo.getContenido());
-                                        System.out.println("Remitente: " + correo.getRemitente().getCorreoElectronico());
-                                        System.out.println("Destinatarios: " + correo.getDestinatarios().stream().map(Contacto::getCorreoElectronico).collect(Collectors.joining(", ")));
-                                        System.out.println("------------");
-                                    }
-                                }
-                                break;
-                    
-                            default:
-                                System.out.println("Opción no válida.");
-                                break;
+                                
+                                // Imprimir la información del correo
+                                System.out.println("Prioridad: " + correo.getPrioridad());
+                                System.out.println("Asunto: " + correo.getAsunto());
+                                System.out.println("Mensaje: " + correo.getContenido());
+                                System.out.println("Remitente: " + correo.getRemitente().getCorreoElectronico());
+                                System.out.println("Destinatarios: " + correo.getDestinatarios().stream().map(Contacto::getCorreoElectronico).collect(Collectors.joining(", ")));
+                                System.out.println("------------");
+                            }
                         }
-                        break;
+                        break;  
 
                     case 9:
                     System.exit(0);
@@ -304,4 +260,4 @@ public class Main {
             }
         } // El Scanner se cerrará automáticamente al salir del bloque try
     }
-}
+ }
