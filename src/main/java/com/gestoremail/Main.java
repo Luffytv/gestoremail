@@ -234,7 +234,7 @@ public class Main {
                         switch (opcionBusquedaUCP) {
                             case 1:
                                 // Filtrar correos por dirección de correo '@ucp.edu.ar'
-                                List<Correo> correosFiltradosDireccionUCP = FiltroUCP.filtrarPorDireccionUCP(bandejaEnviados.obtenerCorreosEnviados());
+                                List<Correo> correosFiltradosDireccionUCP = FiltroUCPPrioridad.filtrarYPriorizarUCP(bandejaEnviados.obtenerCorreosEnviados());
                     
                                 if (correosFiltradosDireccionUCP.isEmpty()) {
                                     System.out.println("No se encontraron correos con dirección '@ucp.edu.ar'.");
@@ -253,7 +253,7 @@ public class Main {
                     
                             case 2:
                                 // Filtrar correos por asunto 'UCP'
-                                List<Correo> correosFiltradosUCP = FiltroUCP.filtrarPorAsuntoUCP(bandejaEnviados.obtenerCorreosEnviados());
+                                List<Correo> correosFiltradosUCP = FiltroUCPPrioridad.filtrarYPriorizarUCP(bandejaEnviados.obtenerCorreosEnviados());
                     
                                 if (correosFiltradosUCP.isEmpty()) {
                                     System.out.println("No se encontraron correos con asunto 'UCP'.");
@@ -272,7 +272,7 @@ public class Main {
                     
                             case 3:
                                 // Filtrar correos por asunto 'UCP' y dirección de correo '@ucp.edu.ar'
-                                List<Correo> correosFiltradosUCPYDireccionUCP = FiltroUCP.filtrarPorAsuntoUCPYDireccionUCP(bandejaEnviados.obtenerCorreosEnviados());
+                                List<Correo> correosFiltradosUCPYDireccionUCP = FiltroUCPPrioridad.filtrarYPriorizarUCP(bandejaEnviados.obtenerCorreosEnviados());
                     
                                 if (correosFiltradosUCPYDireccionUCP.isEmpty()) {
                                     System.out.println("No se encontraron correos que cumplan ambos criterios.");

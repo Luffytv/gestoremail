@@ -8,6 +8,7 @@ public class Correo {
     private String contenido;
     private Contacto remitente;
     private List<Contacto> destinatarios;
+    private String prioridad;
     private Date fechaEnvio; // Campo para almacenar la fecha de envío
 
     private BandejaDeEnviados bandejaDeEnviados; // Campo para almacenar la referencia a la bandeja de enviados
@@ -52,4 +53,13 @@ public class Correo {
             return null;
         }
     }
+
+    public void setPrioridad(String prioridad) {
+        this.prioridad = prioridad;
+    }
+
+    public String getPrioridad(){
+        return prioridad;
+    }
+   
 }
