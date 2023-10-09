@@ -1,14 +1,15 @@
 package com.gestoremail;
 
-import java.util.Date;
+import java.time.LocalDate;
 import java.util.List;
 import java.util.stream.Collectors;
+import java.time.ZoneId;
 
 public class FiltroFecha {
-    private Date fechaInicio;
-    private Date fechaFin;
+    private LocalDate fechaInicio;
+    private LocalDate fechaFin;
 
-    public FiltroFecha(Date fechaInicio, Date fechaFin) {
+    public FiltroFecha(LocalDate fechaInicio, LocalDate fechaFin) {
         this.fechaInicio = fechaInicio;
         this.fechaFin = fechaFin;
     }
@@ -16,8 +17,8 @@ public class FiltroFecha {
     public List<Correo> aplicarFiltro(List<Correo> correos) {
         return correos.stream()
             .filter(correo -> 
-                (fechaInicio == null || correo.getFecha().after(fechaInicio)) &&
-                (fechaFin == null || correo.getFecha().before(fechaFin))
+                (fechaInicio == null || correo.getFecha().toInstant().atZone(ZoneId.systemDefault()).toLocalDate().isAfter(fechaInicio)) &&
+                (fechaFin == null || correo.getFecha().toInstant().atZone(ZoneId.systemDefault()).toLocalDate().isBefore(fechaFin))
             )
             .collect(Collectors.toList());
     }

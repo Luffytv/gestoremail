@@ -12,6 +12,7 @@ public class Correo {
     private Date fechaEnvio; // Campo para almacenar la fecha de envío
 
     private BandejaDeEnviados bandejaDeEnviados; // Campo para almacenar la referencia a la bandeja de enviados
+    
 
     // Constructor que inicializa todos los campos, incluido fechaEnvio
     public Correo(String asunto, String contenido, Contacto remitente, List<Contacto> destinatarios, Date fechaEnvio) {
