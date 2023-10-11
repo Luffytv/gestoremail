@@ -1,42 +1,54 @@
-import com.gestoremail.Correo;
-import com.gestoremail.FiltroSpam;
-import org.junit.Before;
+import com.getordecorreo.FiltroSpam;
+import com.getordecorreo.Correo;
+import com.getordecorreo.Usuario;
 import org.junit.Test;
 
-import static org.junit.Assert.*;
+import java.util.List;
+
+import static org.junit.Assert.assertEquals;
 
 public class FiltroSpam_Test {
 
-    private FiltroSpam filtroSpam;
-    private Correo correo;
+    @Test
+    public void testMarcarComoSpam_CorreoSpam() {
+        FiltroSpam filtro = new FiltroSpam();
+        Usuario remitenteSpam = new Usuario("Mercado Libre", "Mercado", "Libre", "Mercadolibre@example.com");
+        Correo correoSpam = new Correo(remitenteSpam, null, null, null, null);
 
-    @Before
-    public void setUp() {
-        // Configuración inicial para las pruebas
-        filtroSpam = new FiltroSpam();
-        correo = new Correo("Asunto de Spam", "Contenido de Spam", null, null, null);
+        filtro.marcarComoSpam(correoSpam);
+
+        List<Correo> correosSpam = filtro.obtenerCorreosSpam();
+        assertEquals(1, correosSpam.size());
+        assertEquals(correoSpam, correosSpam.get(0));
     }
 
     @Test
-    public void marcarComoSpam_DebeMarcarCorreoComoSpam() {
-        assertFalse(filtroSpam.esCorreoSpam(correo)); // El correo no debe estar marcado como spam inicialmente
-        filtroSpam.marcarComoSpam(correo);
-        assertTrue(filtroSpam.esCorreoSpam(correo)); // Ahora el correo debe estar marcado como spam
+    public void testMarcarComoSpam_CorreoNoSpam() {
+        FiltroSpam filtro = new FiltroSpam();
+        Usuario remitenteNoSpam = new Usuario("Otro Remitente", null, null, "otro@example.com");
+        Correo correoNoSpam = new Correo(remitenteNoSpam, null, null, null, null);
+
+        filtro.marcarComoSpam(correoNoSpam);
+
+        List<Correo> correosSpam = filtro.obtenerCorreosSpam();
+        assertEquals(0, correosSpam.size());
     }
 
     @Test
-    public void obtenerCorreosSpam_DebeRetornarListaNoNula() {
-        assertNotNull(filtroSpam.obtenerCorreosSpam());
+    public void testEsCorreoSpam_CorreoSpam() {
+        FiltroSpam filtro = new FiltroSpam();
+        Usuario remitenteSpam = new Usuario("Mercado Libre", "Mercado", "Libre", "Mercadolibre@example.com");
+        Correo correoSpam = new Correo(remitenteSpam, null, null, null, null);
+    
+        assertEquals(true, filtro.esCorreoSpam(correoSpam));
     }
-
+    
     @Test
-    public void obtenerCorreosSpam_SinCorreosSpam_DebeRetornarListaVacia() {
-        assertTrue(filtroSpam.obtenerCorreosSpam().isEmpty());
-    }
-
-    @Test
-    public void obtenerCorreosSpam_ConCorreosSpam_DebeRetornarListaNoVacia() {
-        filtroSpam.marcarComoSpam(correo);
-        assertFalse(filtroSpam.obtenerCorreosSpam().isEmpty());
+    public void testEsCorreoSpam_CorreoNoSpam() {
+        FiltroSpam filtro = new FiltroSpam();
+        Usuario remitenteNoSpam = new Usuario("Otro Remitente", null, null, "otro@example.com");
+        Correo correoNoSpam = new Correo(remitenteNoSpam, null, null, null, null);
+    
+        assertEquals(false, filtro.esCorreoSpam(correoNoSpam));
     }
 }

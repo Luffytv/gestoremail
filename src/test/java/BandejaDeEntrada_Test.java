@@ -1,16 +1,16 @@
-import com.gestoremail.BandejaDeEntrada;
-import com.gestoremail.Correo;
-import com.gestoremail.Contacto;
+import com.getordecorreo.Contacto;
+import com.getordecorreo.Correo;
+import com.getordecorreo.BandejaDeEntrada;
+import com.getordecorreo.Usuario;
+import static org.junit.Assert.assertEquals;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+
 import org.junit.Before;
 import org.junit.Test;
 
-import java.util.List;
-import java.util.function.Predicate;
-
-import static org.junit.Assert.*;
-
 public class BandejaDeEntrada_Test {
-
     private BandejaDeEntrada bandeja;
 
     @Before
@@ -19,53 +19,16 @@ public class BandejaDeEntrada_Test {
     }
 
     @Test
-public void recibirCorreo_AgregaCorreoALaBandejaEntrada() {
-    Contacto remitente = new Contacto("Remitente", "Apellido", "remitente@example.com");
-    Correo correo = new Correo("Asunto", "Contenido", remitente, null, null); // Asumiendo que no es necesario especificar destinatarios ni fechaEnvio
-    bandeja.recibirCorreo(correo);
+    public void testAgregarCorreo() {
+        Usuario remitente = new Usuario("remite", "Nombre", "Apellido", "correo@dominio.com");
+        List<Contacto> destinatarios = new ArrayList<>(); // Asegúrate de inicializar la lista si no lo has hecho antes
+        destinatarios.add(new Contacto("destinatario1", "Nombre1", "Apellido1", "correo1@dominio.com"));
+        destinatarios.add(new Contacto("destinatario2", "Nombre2", "Apellido2", "correo2@dominio.com"));
 
-    List<Correo> correosEnBandeja = bandeja.obtenerCorreosEnBandejaEntrada();
-    assertEquals(1, correosEnBandeja.size());
-    assertTrue(correosEnBandeja.contains(correo));
-}
+        Correo correo = new Correo(remitente, destinatarios, "Asunto del correo", "Contenido del correo", new Date());
+        bandeja.agregarCorreo(correo);
 
-    @Test
-    public void enviarCorreo_MueveCorreoALaBandejaEnviados() {
-        Contacto remitente = new Contacto("Remitente", "Apellido", "remitente@example.com");
-        Correo correo = new Correo("Asunto", "Contenido", remitente, null, null);
-        bandeja.recibirCorreo(correo);
-        bandeja.enviarCorreo(correo);
-
-        List<Correo> correosEnBandejaEntrada = bandeja.obtenerCorreosEnBandejaEntrada();
-        assertEquals(0, correosEnBandejaEntrada.size());
+        assertEquals(1, bandeja.getCorreos().size());
     }
 
-    @Test
-    public void buscarCorreos_FiltrarPorAsunto() {
-        Contacto remitente = new Contacto("Remitente", "Apellido", "remitente@example.com");
-        Correo correo1 = new Correo("Asunto 1", "Contenido 1", remitente, null, null);
-        Correo correo2 = new Correo("Asunto 2", "Contenido 2", remitente, null, null);
-        bandeja.recibirCorreo(correo1);
-        bandeja.recibirCorreo(correo2);
-
-        Predicate<Correo> filtro = correo -> correo.getAsunto().equals("Asunto 1");
-        List<Correo> correosFiltrados = bandeja.buscarCorreos(filtro);
-
-        assertEquals(1, correosFiltrados.size());
-        assertTrue(correosFiltrados.contains(correo1));
-        assertFalse(correosFiltrados.contains(correo2));
-    }
-
-    @Test
-    public void eliminarCorreoDeEntrada_EliminaCorreoDeLaBandejaEntrada() {
-        Contacto remitente = new Contacto("Remitente", "Apellido", "remitente@example.com");
-        Correo correo = new Correo("Asunto", "Contenido", remitente, null, null);
-        bandeja.recibirCorreo(correo);
-        bandeja.eliminarCorreoDeEntrada(correo);
-
-        List<Correo> correosEnBandejaEntrada = bandeja.obtenerCorreosEnBandejaEntrada();
-
-        assertEquals(0, correosEnBandejaEntrada.size());
-        assertFalse(correosEnBandejaEntrada.contains(correo));
-    }
 }

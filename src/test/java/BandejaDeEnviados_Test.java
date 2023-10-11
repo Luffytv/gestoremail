@@ -1,49 +1,54 @@
-import com.gestoremail.BandejaDeEnviados;
-import com.gestoremail.Correo;
-import com.gestoremail.Contacto;
-
+import com.getordecorreo.BandejaDeEnviados;
+import com.getordecorreo.Contacto;
+import com.getordecorreo.Correo;
+import com.getordecorreo.Usuario;
 import org.junit.Before;
 import org.junit.Test;
-import java.util.List;
-import java.util.function.Predicate;
 
-import static org.junit.Assert.*;
+import java.util.List;
+import java.util.ArrayList;
+
+import static org.junit.Assert.assertEquals;
 
 public class BandejaDeEnviados_Test {
-
-    private BandejaDeEnviados bandeja;
+    private BandejaDeEnviados bandejaDeEnviados;
 
     @Before
     public void setUp() {
-        bandeja = new BandejaDeEnviados();
+        bandejaDeEnviados = new BandejaDeEnviados();
     }
 
     @Test
-    public void enviarCorreo_AgregaCorreoALaBandejaEnviados() {
-        Correo correo = new Correo("Asunto", "Contenido", new Contacto("Remitente", "Apellido", "remitente@example.com"), null, null);
-        bandeja.enviarCorreo(correo);
+    public void testEnviarCorreo() {
+        // Crear un correo de ejemplo
+        Usuario remitente = new Usuario("remitente", "Nombre Remitente", "Apellido Remitente", "correo@remitente.com");
+        List<Contacto> destinatarios = new ArrayList<>();
+        destinatarios.add(new Contacto("destinatario", "Nombre Destinatario", "Apellido Destinatario", "correo@destinatario.com"));
+        Correo correo = new Correo(remitente, destinatarios, "Asunto del Correo", "Contenido del Correo", null);
 
-        List<Correo> correosEnviados = bandeja.obtenerCorreosEnviados();
+        bandejaDeEnviados.enviarCorreo(correo);
+
+        // Verificar que el correo se ha agregado correctamente a la bandeja de enviados
+        List<Correo> correosEnviados = bandejaDeEnviados.obtenerCorreosEnviados();
         assertEquals(1, correosEnviados.size());
-        assertTrue(correosEnviados.contains(correo));
+        assertEquals(correo, correosEnviados.get(0));
     }
 
     @Test
-    public void buscarCorreosEnviados_ConFiltroPersonalizado() {
-        Correo correo1 = new Correo("Asunto1", "Contenido1", new Contacto("Remitente", "Apellido", "remitente@example.com"), null, null);
-        Correo correo2 = new Correo("Asunto2", "Contenido2", new Contacto("Remitente", "Apellido", "remitente@example.com"), null, null);
-        Correo correo3 = new Correo("Asunto3", "Contenido3", new Contacto("OtroRemitente", "OtroApellido", "otroremitente@example.com"), null, null);
+    public void testObtenerCorreosEnviados() {
+        // Verificar que la bandeja de enviados esté inicialmente vacía
+        List<Correo> correosEnviados = bandejaDeEnviados.obtenerCorreosEnviados();
+        assertEquals(0, correosEnviados.size());
 
-        bandeja.enviarCorreo(correo1);
-        bandeja.enviarCorreo(correo2);
-        bandeja.enviarCorreo(correo3);
+        // Agregar un correo y verificar que se pueda obtener
+        Usuario remitente = new Usuario("remitente", "Nombre Remitente", "Apellido Remitente", "correo@remitente.com");
+        List<Contacto> destinatarios = new ArrayList<>();
+        destinatarios.add(new Contacto("destinatario", "Nombre Destinatario", "Apellido Destinatario", "correo@destinatario.com"));
+        Correo correo = new Correo(remitente, destinatarios, "Asunto del Correo", "Contenido del Correo", null);
+        bandejaDeEnviados.enviarCorreo(correo);
 
-        Predicate<Correo> filtroRemitente = c -> c.getRemitente().getCorreoElectronico().equals("remitente@example.com");
-        List<Correo> correosFiltrados = bandeja.buscarCorreosEnviados(filtroRemitente);
-
-        assertEquals(2, correosFiltrados.size());
-        assertTrue(correosFiltrados.contains(correo1));
-        assertTrue(correosFiltrados.contains(correo2));
-        assertFalse(correosFiltrados.contains(correo3));
+        correosEnviados = bandejaDeEnviados.obtenerCorreosEnviados();
+        assertEquals(1, correosEnviados.size());
+        assertEquals(correo, correosEnviados.get(0));
     }
 }

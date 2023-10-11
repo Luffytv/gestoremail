@@ -1,79 +1,62 @@
-import com.gestoremail.BandejaDeEnviados;
-import com.gestoremail.Contacto;
-import com.gestoremail.Correo;
-import org.junit.Before;
-import org.junit.Test;
+import com.getordecorreo.Usuario;
+import com.getordecorreo.Correo;
+import com.getordecorreo.Contacto;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
 
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import static org.junit.Assert.*;
+import org.junit.Before;
+import org.junit.Test;
 
 public class Correo_Test {
-
     private Correo correo;
-    private BandejaDeEnviados bandejaDeEnviados;
+    private Usuario remitente;
+    private List<Contacto> destinatarios;
 
     @Before
     public void setUp() {
-        // Configuración inicial para las pruebas
-        bandejaDeEnviados = new BandejaDeEnviados();
-        correo = new Correo("Asunto de prueba", "Contenido de prueba",
-                new Contacto("Remitente", "Apellido", "remitente@example.com"),
-                new ArrayList<>(), new Date());
+        // Configuración común para las pruebas
+        remitente = new Usuario("remitente", "Nombre Remitente", "Apellido Remitente", "correo@remitente.com");
+        destinatarios = new ArrayList<>();
+        destinatarios.add(new Contacto("destinatario1", "Nombre Destinatario 1", "Apellido Destinatario 1", "correo1@destinatario.com"));
+        destinatarios.add(new Contacto("destinatario2", "Nombre Destinatario 2", "Apellido Destinatario 2", "correo2@destinatario.com"));
+        Date fechaEnvio = new Date();
 
-        // Establece la bandeja de enviados
-        correo.setBandejaDeEnviados(bandejaDeEnviados);
+        // Crear una instancia de Correo para cada prueba
+        correo = new Correo(remitente, destinatarios, "Asunto del Correo", "Contenido del Correo", fechaEnvio);
     }
 
     @Test
-    public void obtenerCorreosEnBandejaEnviados_DebeRetornarListaNoNula() {
-        List<Correo> correosEnviados = correo.obtenerCorreosEnBandejaEnviados();
-        assertNotNull(correosEnviados);
+    public void testGetRemitente() {
+        assertEquals(remitente, correo.getRemitente());
     }
 
     @Test
-    public void obtenerCorreosEnBandejaEnviados_SinBandejaDeEnviados_DebeRetornarNull() {
-        // Configuración sin bandeja de enviados
-        correo.setBandejaDeEnviados(null);
-
-        List<Correo> correosEnviados = correo.obtenerCorreosEnBandejaEnviados();
-        assertNull(correosEnviados);
+    public void testGetDestinatarios() {
+        assertEquals(destinatarios, correo.getDestinatarios());
     }
 
     @Test
-    public void setPrioridad_DebeCambiarPrioridad() {
+    public void testGetAsunto() {
+        assertEquals("Asunto del Correo", correo.getAsunto());
+    }
+
+    @Test
+    public void testGetContenido() {
+        assertEquals("Contenido del Correo", correo.getContenido());
+    }
+
+    @Test
+    public void testGetFechaEnvio() {
+        assertNotNull(correo.getFechaEnvio());
+    }
+
+    @Test
+    public void testSetAndGetPrioridad() {
         correo.setPrioridad("Alta");
         assertEquals("Alta", correo.getPrioridad());
-    }
-
-    @Test
-    public void obtenerAsunto_DebeRetornarAsuntoCorrecto() {
-        assertEquals("Asunto de prueba", correo.getAsunto());
-    }
-
-    @Test
-    public void obtenerContenido_DebeRetornarContenidoCorrecto() {
-        assertEquals("Contenido de prueba", correo.getContenido());
-    }
-
-    @Test
-    public void obtenerFecha_DebeRetornarFechaCorrecta() {
-        assertNotNull(correo.getFecha());
-    }
-
-    @Test
-    public void obtenerRemitente_DebeRetornarRemitenteCorrecto() {
-        Contacto remitente = correo.getRemitente();
-        assertEquals("Remitente", remitente.getNombre());
-        assertEquals("Apellido", remitente.getApellido());
-        assertEquals("remitente@example.com", remitente.getCorreoElectronico());
-    }
-
-    @Test
-    public void obtenerDestinatarios_DebeRetornarListaVacia() {
-        List<Contacto> destinatarios = correo.getDestinatarios();
-        assertTrue(destinatarios.isEmpty());
     }
 }
