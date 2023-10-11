@@ -1,30 +1,30 @@
-package com.gestoremail;
+package com.getordecorreo;
 
-import java.util.Date;
 import java.util.List;
+import java.util.Date;
 
 public class Correo {
+    private Usuario remitente;
+    private List<Contacto> destinatarios;
     private String asunto;
     private String contenido;
-    private Contacto remitente;
-    private List<Contacto> destinatarios;
-    private String prioridad;
-    private Date fechaEnvio; // Campo para almacenar la fecha de envío
+   private Date fechaEnvio;
+   private String prioridad;
 
-    private BandejaDeEnviados bandejaDeEnviados; // Campo para almacenar la referencia a la bandeja de enviados
-    
-
-    // Constructor que inicializa todos los campos, incluido fechaEnvio
-    public Correo(String asunto, String contenido, Contacto remitente, List<Contacto> destinatarios, Date fechaEnvio) {
-        this.asunto = asunto;
-        this.contenido = contenido;
+    public Correo(Usuario remitente, List<Contacto> destinatarios, String asunto, String contenido, Date fechaEnvio) {
         this.remitente = remitente;
         this.destinatarios = destinatarios;
+        this.asunto = asunto;
+        this.contenido = contenido;
         this.fechaEnvio = fechaEnvio;
     }
 
-    public void setBandejaDeEnviados(BandejaDeEnviados bandejaDeEnviados) {
-        this.bandejaDeEnviados = bandejaDeEnviados;
+    public Usuario getRemitente() {
+        return remitente;
+    }
+
+    public List<Contacto> getDestinatarios() {
+        return destinatarios;
     }
 
     public String getAsunto() {
@@ -35,24 +35,8 @@ public class Correo {
         return contenido;
     }
 
-    public Date getFecha() {
+    public Date getFechaEnvio(){
         return fechaEnvio;
-    }
-
-    public Contacto getRemitente() {
-        return remitente;
-    }
-
-    public List<Contacto> getDestinatarios() {
-        return destinatarios;
-    }
-
-    public List<Correo> obtenerCorreosEnBandejaEnviados() {
-        if (bandejaDeEnviados != null) {
-            return bandejaDeEnviados.obtenerCorreosEnviadosDeCorreo(this);
-        } else {
-            return null;
-        }
     }
 
     public void setPrioridad(String prioridad) {
@@ -62,5 +46,4 @@ public class Correo {
     public String getPrioridad(){
         return prioridad;
     }
-   
 }

@@ -1,22 +1,20 @@
-package com.gestoremail;
+package com.getordecorreo;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
 public class FiltroAsuntoPalabraClave {
-    private String asunto;
-    private String palabraClave;
+    private String criterioBusqueda;
 
-    public FiltroAsuntoPalabraClave(String asunto, String palabraClave) {
-        this.asunto = asunto;
-        this.palabraClave = palabraClave;
+    public FiltroAsuntoPalabraClave(String criterioBusqueda) {
+        this.criterioBusqueda = criterioBusqueda;
     }
 
     public List<Correo> aplicarFiltro(List<Correo> correos) {
         return correos.stream()
             .filter(correo -> 
-                (asunto == null || correo.getAsunto().contains(asunto)) ||
-                (palabraClave == null || correo.getContenido().contains(palabraClave))
+                (criterioBusqueda == null || correo.getAsunto().contains(criterioBusqueda)) ||
+                (criterioBusqueda == null || correo.getContenido().contains(criterioBusqueda))
             )
             .collect(Collectors.toList());
     }

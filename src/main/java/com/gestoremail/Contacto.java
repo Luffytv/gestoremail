@@ -1,16 +1,24 @@
-package com.gestoremail;
+package com.getordecorreo;
 
 public class Contacto {
+    private String userName;
     private String nombre;
     private String apellido;
     private String correoElectronico;
-    private BandejaDeEntrada bandejaDeEntrada; // Agregar una bandeja de entrada para el contacto
 
-    public Contacto(String nombre, String apellido, String correoElectronico) {
+    public Contacto(String userName, String nombre,String apellido, String correoElectronico) {
+        this.userName = userName;
         this.nombre = nombre;
         this.apellido = apellido;
         this.correoElectronico = correoElectronico;
-        this.bandejaDeEntrada = new BandejaDeEntrada(); // Inicializa la bandeja de entrada del contacto
+    }
+
+    public String getUsername(){
+        return userName;
+    }
+
+    public void setuserName(String userName){
+        this.userName = userName;
     }
 
     public String getNombre() {
@@ -21,11 +29,11 @@ public class Contacto {
         this.nombre = nombre;
     }
 
-    public String getApellido() {
+    public String getApellido(){
         return apellido;
     }
 
-    public void setApellido(String apellido) {
+    public void setApellido(String apellido){
         this.apellido = apellido;
     }
 
@@ -35,9 +43,5 @@ public class Contacto {
 
     public void setCorreoElectronico(String correoElectronico) {
         this.correoElectronico = correoElectronico;
-    }
-
-    public BandejaDeEntrada getBandejaDeEntrada() {
-        return bandejaDeEntrada;
     }
 }
